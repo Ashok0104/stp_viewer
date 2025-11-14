@@ -151,25 +151,103 @@
             top: 10px;
             left: 10px;
             z-index: 100;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px 12px 12px 12px;
             border-radius: 8px;
             color: white;
+            width: 260px;
+            max-height: calc(100vh - 20px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-size: 0.85em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+        }
+
+        .viewer-controls::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .viewer-controls::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .viewer-controls::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .viewer-controls::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .viewer-controls .control-group {
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .viewer-controls .control-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .viewer-controls .control-group:last-child button {
+            margin-bottom: 4px;
+        }
+        
+        .viewer-controls .control-group:last-child button:last-child {
+            margin-bottom: 0;
+        }
+
+        .viewer-controls h4 {
+            margin: 0 0 6px 0;
+            font-size: 0.9em;
+            color: #fff;
+            font-weight: 600;
         }
 
         .viewer-controls button {
-            margin: 5px;
-            padding: 8px 15px;
+            display: block;
+            width: 100%;
+            margin: 4px 0;
+            padding: 7px 10px;
             background: #667eea;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            text-align: left;
+            transition: all 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .viewer-controls button:hover {
             background: #764ba2;
+            transform: translateX(2px);
+        }
+
+        .viewer-controls label {
+            display: block;
+            margin: 6px 0 4px 0;
+            font-size: 0.85em;
+            color: #fff;
+        }
+
+        .viewer-controls input[type="range"] {
+            width: 100%;
+            margin: 4px 0 8px 0;
+            cursor: pointer;
+        }
+
+        .viewer-controls #opacityValue {
+            font-weight: 600;
+            color: #667eea;
         }
 
         .loading {
@@ -224,6 +302,181 @@
         .success-message.show {
             display: block;
         }
+
+        .recent-uploads {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .recent-uploads h3 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .recent-uploads-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .recent-upload-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .recent-upload-item:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(3px);
+        }
+
+        .recent-upload-item .file-name {
+            flex: 1;
+            font-weight: 500;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .recent-upload-item .file-date {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-left: 10px;
+        }
+
+        .recent-upload-item .load-btn {
+            padding: 5px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .recent-upload-item .load-btn:hover {
+            background: #764ba2;
+        }
+
+        .no-recent-uploads {
+            text-align: center;
+            color: #6c757d;
+            padding: 15px;
+            font-style: italic;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .zoom-controls button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .zoom-controls button:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+        }
+
+        .zoom-controls button:active {
+            transform: scale(0.95);
+        }
+
+        .zoom-slider-container {
+            position: relative;
+            height: 200px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-slider {
+            writing-mode: vertical-lr;
+            direction: rtl;
+            width: 8px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            border-radius: 4px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .zoom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+
+        .zoom-slider::-webkit-slider-thumb:hover {
+            background: #764ba2;
+            transform: scale(1.2);
+        }
+
+        .zoom-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .zoom-slider::-moz-range-thumb:hover {
+            background: #764ba2;
+        }
+
+        .zoom-label {
+            color: white;
+            font-size: 0.75em;
+            margin-top: 5px;
+            text-align: center;
+            min-width: 50px;
+        }
     </style>
 </head>
 <body>
@@ -254,13 +507,58 @@
                 
                 <div class="error-message" id="errorMessage"></div>
                 <div class="success-message" id="successMessage"></div>
+                
+                <div class="recent-uploads" id="recentUploads" style="display: none;">
+                    <h3>📁 Recent Uploads (Last 4)</h3>
+                    <div class="recent-uploads-list" id="recentUploadsList">
+                        <div class="no-recent-uploads">No recent uploads</div>
+                    </div>
+                </div>
             </div>
 
             <div class="viewer-container" id="viewerContainer">
+                <div class="zoom-controls" id="zoomControls">
+                    <button onclick="zoomIn()" title="Zoom In">+</button>
+                    <div class="zoom-slider-container">
+                        <input type="range" 
+                               id="zoomSlider" 
+                               class="zoom-slider" 
+                               min="10" 
+                               max="200" 
+                               value="100" 
+                               orient="vertical"
+                               oninput="setZoomLevel(this.value)">
+                    </div>
+                    <button onclick="zoomOut()" title="Zoom Out">−</button>
+                    <div class="zoom-label" id="zoomLabel">100%</div>
+                </div>
                 <div class="viewer-controls">
-                    <button onclick="resetView()">Reset View</button>
-                    <button onclick="toggleWireframe()">Toggle Wireframe</button>
-                    <button onclick="toggleAxes()">Toggle Axes</button>
+                    <div class="control-group">
+                        <h4>View Controls</h4>
+                        <button onclick="resetView()">Reset View</button>
+                        <button onclick="setViewFront()">Front</button>
+                        <button onclick="setViewTop()">Top</button>
+                        <button onclick="setViewSide()">Side</button>
+                        <button onclick="setViewIso()">Isometric</button>
+                    </div>
+                    <div class="control-group">
+                        <h4>Display Options</h4>
+                        <button onclick="toggleWireframe()" id="wireframeBtn">Wireframe: OFF</button>
+                        <button onclick="toggleAxes()" id="axesBtn">Axes: ON</button>
+                        <button onclick="toggleGrid()" id="gridBtn">Grid: ON</button>
+                        <button onclick="toggleBackground()" id="bgBtn">Background: Dark</button>
+                    </div>
+                    <div class="control-group">
+                        <h4>Model Options</h4>
+                        <label>Opacity: <span id="opacityValue">100%</span></label>
+                        <input type="range" id="opacitySlider" min="10" max="100" value="100" oninput="setOpacity(this.value)">
+                        <button onclick="toggleModel()" id="modelBtn">Model: Visible</button>
+                    </div>
+                    <div class="control-group">
+                        <h4>Other</h4>
+                        <button onclick="toggleFullscreen()" id="fullscreenBtn">Fullscreen</button>
+                        <button onclick="toggleLighting()" id="lightingBtn">Lighting: Normal</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -287,26 +585,60 @@
         
         // Initialize viewer after modules are loaded
         let scene, camera, renderer, controls, model, wireframe = false, showAxes = true;
-        let axesHelper;
+        let axesHelper, gridHelper;
+        let showGrid = true;
+        let darkBackground = true;
+        let modelVisible = true;
+        let lightingMode = 'normal'; // 'normal' or 'bright'
+        let ambientLight, directionalLight1, directionalLight2;
+        let baseCameraDistance = 100;
+        let currentZoomLevel = 100;
 
         // Update tool button states to reflect current settings
         // Define this function immediately and make it globally available
         window.updateToolStates = function() {
             try {
-                const buttons = document.querySelectorAll('.viewer-controls button');
-                if (buttons.length >= 3) {
-                    const wireframeBtn = buttons[1]; // Second button
-                    const axesBtn = buttons[2]; // Third button
-                    
-                    if (wireframeBtn) {
-                        wireframeBtn.textContent = wireframe ? 'Wireframe: ON' : 'Wireframe: OFF';
-                        wireframeBtn.style.background = wireframe ? '#28a745' : '#667eea';
-                    }
-                    
-                    if (axesBtn) {
-                        axesBtn.textContent = showAxes ? 'Axes: ON' : 'Axes: OFF';
-                        axesBtn.style.background = showAxes ? '#28a745' : '#667eea';
-                    }
+                const wireframeBtn = document.getElementById('wireframeBtn');
+                const axesBtn = document.getElementById('axesBtn');
+                const gridBtn = document.getElementById('gridBtn');
+                const bgBtn = document.getElementById('bgBtn');
+                const modelBtn = document.getElementById('modelBtn');
+                const lightingBtn = document.getElementById('lightingBtn');
+                const fullscreenBtn = document.getElementById('fullscreenBtn');
+                
+                if (wireframeBtn) {
+                    wireframeBtn.textContent = wireframe ? 'Wireframe: ON' : 'Wireframe: OFF';
+                    wireframeBtn.style.background = wireframe ? '#28a745' : '#667eea';
+                }
+                
+                if (axesBtn) {
+                    axesBtn.textContent = showAxes ? 'Axes: ON' : 'Axes: OFF';
+                    axesBtn.style.background = showAxes ? '#28a745' : '#667eea';
+                }
+                
+                if (gridBtn) {
+                    gridBtn.textContent = showGrid ? 'Grid: ON' : 'Grid: OFF';
+                    gridBtn.style.background = showGrid ? '#28a745' : '#667eea';
+                }
+                
+                if (bgBtn) {
+                    bgBtn.textContent = darkBackground ? 'Background: Dark' : 'Background: Light';
+                    bgBtn.style.background = darkBackground ? '#667eea' : '#ffc107';
+                }
+                
+                if (modelBtn) {
+                    modelBtn.textContent = modelVisible ? 'Model: Visible' : 'Model: Hidden';
+                    modelBtn.style.background = modelVisible ? '#28a745' : '#dc3545';
+                }
+                
+                if (lightingBtn) {
+                    lightingBtn.textContent = lightingMode === 'bright' ? 'Lighting: Bright' : 'Lighting: Normal';
+                    lightingBtn.style.background = lightingMode === 'bright' ? '#ffc107' : '#667eea';
+                }
+                
+                if (fullscreenBtn) {
+                    const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
+                    fullscreenBtn.textContent = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
                 }
             } catch (e) {
                 console.warn('Error updating tool states:', e);
@@ -347,14 +679,14 @@
             controls.dampingFactor = 0.05;
 
             // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            ambientLight = new THREE.AmbientLight(0x404040, 0.6);
             scene.add(ambientLight);
 
-            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight1.position.set(1, 1, 1);
             scene.add(directionalLight1);
 
-            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+            directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
             directionalLight2.position.set(-1, -1, -1);
             scene.add(directionalLight2);
 
@@ -364,11 +696,23 @@
             scene.add(axesHelper);
 
             // Grid helper
-            const gridHelper = new THREE.GridHelper(200, 20, 0x444444, 0x222222);
+            gridHelper = new THREE.GridHelper(200, 20, 0x444444, 0x222222);
+            gridHelper.visible = showGrid;
             scene.add(gridHelper);
 
             // Handle window resize
             window.addEventListener('resize', onWindowResize);
+            
+            // Handle fullscreen changes
+            document.addEventListener('fullscreenchange', updateFullscreenButton);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+            document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+            
+            function updateFullscreenButton() {
+                if (typeof window.updateToolStates === 'function') {
+                    window.updateToolStates();
+                }
+            }
 
             // Initialize tool states after a brief delay to ensure DOM is ready
             setTimeout(() => {
@@ -436,6 +780,7 @@
                     // Handle edge case: if model is too small or invalid
                     if (maxDim < 0.001 || !isFinite(maxDim)) {
                         console.warn('Model size is very small or invalid, using default camera position');
+                        baseCameraDistance = 100;
                         camera.position.set(100, 100, 100);
                     } else {
                         // Calculate appropriate camera distance
@@ -447,12 +792,21 @@
                         cameraZ = Math.max(cameraZ, maxDim * 0.5);
                         cameraZ = Math.min(cameraZ, 10000);
                         
+                        baseCameraDistance = cameraZ;
                         camera.position.set(cameraZ, cameraZ, cameraZ);
                     }
                     
                     camera.lookAt(0, 0, 0);
                     controls.target.set(0, 0, 0);
                     controls.update();
+                    
+                    // Reset zoom to 100%
+                    currentZoomLevel = 100;
+                    const zoomSlider = document.getElementById('zoomSlider');
+                    if (zoomSlider) {
+                        zoomSlider.value = 100;
+                    }
+                    updateZoomLabel(100);
 
                     // Create material with current wireframe state
                     const material = new THREE.MeshPhongMaterial({
@@ -467,6 +821,16 @@
                     model = new THREE.Mesh(geometry, material);
                     model.castShadow = true;
                     model.receiveShadow = true;
+                    model.visible = modelVisible;
+                    
+                    // Set initial opacity
+                    const opacitySlider = document.getElementById('opacitySlider');
+                    if (opacitySlider) {
+                        const opacity = parseInt(opacitySlider.value) / 100;
+                        model.material.opacity = opacity;
+                        model.material.transparent = opacity < 1.0;
+                    }
+                    
                     scene.add(model);
 
                     // Update all tools to reflect current state
@@ -509,15 +873,75 @@
                     cameraZ *= 1.8;
                     cameraZ = Math.max(cameraZ, maxDim * 0.5);
                     cameraZ = Math.min(cameraZ, 10000);
+                    baseCameraDistance = cameraZ;
                     camera.position.set(cameraZ, cameraZ, cameraZ);
                 } else {
+                    baseCameraDistance = 100;
                     camera.position.set(100, 100, 100);
                 }
                 
                 camera.lookAt(0, 0, 0);
                 controls.target.set(0, 0, 0);
                 controls.update();
+                
+                // Reset zoom to 100%
+                currentZoomLevel = 100;
+                const zoomSlider = document.getElementById('zoomSlider');
+                if (zoomSlider) {
+                    zoomSlider.value = 100;
+                }
+                updateZoomLabel(100);
             }
+        };
+
+        // Zoom functions
+        function updateCameraZoom() {
+            if (!camera || !controls) return;
+            
+            const zoomFactor = currentZoomLevel / 100;
+            const currentPos = camera.position.clone();
+            const distance = currentPos.length();
+            const direction = currentPos.normalize();
+            
+            // Calculate new distance based on zoom level
+            const newDistance = baseCameraDistance / zoomFactor;
+            
+            // Update camera position while maintaining direction
+            camera.position.copy(direction.multiplyScalar(newDistance));
+            controls.update();
+        }
+
+        function updateZoomLabel(level) {
+            const zoomLabel = document.getElementById('zoomLabel');
+            if (zoomLabel) {
+                zoomLabel.textContent = level + '%';
+            }
+        }
+
+        window.setZoomLevel = function(value) {
+            currentZoomLevel = parseInt(value);
+            updateZoomLabel(currentZoomLevel);
+            updateCameraZoom();
+        };
+
+        window.zoomIn = function() {
+            currentZoomLevel = Math.min(currentZoomLevel + 10, 200);
+            const zoomSlider = document.getElementById('zoomSlider');
+            if (zoomSlider) {
+                zoomSlider.value = currentZoomLevel;
+            }
+            updateZoomLabel(currentZoomLevel);
+            updateCameraZoom();
+        };
+
+        window.zoomOut = function() {
+            currentZoomLevel = Math.max(currentZoomLevel - 10, 10);
+            const zoomSlider = document.getElementById('zoomSlider');
+            if (zoomSlider) {
+                zoomSlider.value = currentZoomLevel;
+            }
+            updateZoomLabel(currentZoomLevel);
+            updateCameraZoom();
         };
 
         window.toggleWireframe = function() {
@@ -540,6 +964,344 @@
             }
         };
 
+        window.toggleGrid = function() {
+            showGrid = !showGrid;
+            if (gridHelper) {
+                gridHelper.visible = showGrid;
+            }
+            if (typeof window.updateToolStates === 'function') {
+                window.updateToolStates();
+            }
+        };
+
+        window.toggleBackground = function() {
+            darkBackground = !darkBackground;
+            if (scene) {
+                scene.background = new THREE.Color(darkBackground ? 0x1a1a1a : 0xf5f5f5);
+            }
+            if (typeof window.updateToolStates === 'function') {
+                window.updateToolStates();
+            }
+        };
+
+        window.toggleModel = function() {
+            modelVisible = !modelVisible;
+            if (model) {
+                model.visible = modelVisible;
+            }
+            if (typeof window.updateToolStates === 'function') {
+                window.updateToolStates();
+            }
+        };
+
+        window.setOpacity = function(value) {
+            const opacity = parseInt(value) / 100;
+            if (model && model.material) {
+                model.material.opacity = opacity;
+                model.material.transparent = opacity < 1.0;
+            }
+            const opacityValue = document.getElementById('opacityValue');
+            if (opacityValue) {
+                opacityValue.textContent = value + '%';
+            }
+        };
+
+        window.toggleLighting = function() {
+            lightingMode = lightingMode === 'normal' ? 'bright' : 'normal';
+            if (ambientLight && directionalLight1 && directionalLight2) {
+                if (lightingMode === 'bright') {
+                    ambientLight.intensity = 1.0;
+                    directionalLight1.intensity = 1.2;
+                    directionalLight2.intensity = 0.8;
+                } else {
+                    ambientLight.intensity = 0.6;
+                    directionalLight1.intensity = 0.8;
+                    directionalLight2.intensity = 0.4;
+                }
+            }
+            if (typeof window.updateToolStates === 'function') {
+                window.updateToolStates();
+            }
+        };
+
+        window.toggleFullscreen = function() {
+            const container = document.getElementById('viewerContainer');
+            if (!container) return;
+
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
+                // Enter fullscreen
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.mozRequestFullScreen) {
+                    container.mozRequestFullScreen();
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                }
+            }
+            
+            // Update button after a short delay
+            setTimeout(() => {
+                if (typeof window.updateToolStates === 'function') {
+                    window.updateToolStates();
+                }
+            }, 100);
+        };
+
+        // View preset functions
+        window.setViewFront = function() {
+            if (model && model.geometry) {
+                model.geometry.computeBoundingBox();
+                const size = model.geometry.boundingBox.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = Math.max(maxDim * 1.5, 100);
+                camera.position.set(0, 0, distance);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            } else {
+                camera.position.set(0, 0, 100);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            }
+        };
+
+        window.setViewTop = function() {
+            if (model && model.geometry) {
+                model.geometry.computeBoundingBox();
+                const size = model.geometry.boundingBox.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = Math.max(maxDim * 1.5, 100);
+                camera.position.set(0, distance, 0);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            } else {
+                camera.position.set(0, 100, 0);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            }
+        };
+
+        window.setViewSide = function() {
+            if (model && model.geometry) {
+                model.geometry.computeBoundingBox();
+                const size = model.geometry.boundingBox.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = Math.max(maxDim * 1.5, 100);
+                camera.position.set(distance, 0, 0);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            } else {
+                camera.position.set(100, 0, 0);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            }
+        };
+
+        window.setViewIso = function() {
+            if (model && model.geometry) {
+                model.geometry.computeBoundingBox();
+                const size = model.geometry.boundingBox.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const distance = Math.max(maxDim * 1.8, 100);
+                camera.position.set(distance, distance, distance);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            } else {
+                camera.position.set(100, 100, 100);
+                camera.lookAt(0, 0, 0);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            }
+        };
+
+        // Recent uploads management
+        function getRecentUploads() {
+            try {
+                const recent = localStorage.getItem('stpViewerRecentUploads');
+                return recent ? JSON.parse(recent) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveRecentUpload(filename, stlFile) {
+            try {
+                let recent = getRecentUploads();
+                // Remove if already exists
+                recent = recent.filter(item => item.filename !== filename);
+                // Add to beginning
+                recent.unshift({
+                    filename: filename,
+                    stlFile: stlFile,
+                    date: new Date().toISOString()
+                });
+                // Keep only last 4
+                recent = recent.slice(0, 4);
+                localStorage.setItem('stpViewerRecentUploads', JSON.stringify(recent));
+                displayRecentUploads();
+            } catch (e) {
+                console.warn('Failed to save recent upload:', e);
+            }
+        }
+
+        function displayRecentUploads() {
+            const container = document.getElementById('recentUploads');
+            const list = document.getElementById('recentUploadsList');
+            
+            if (!container || !list) return;
+            
+            // Fetch recent uploads from server
+            fetch('/api/recent-uploads')
+                .then(response => response.json())
+                .then(data => {
+                    const recentUploads = data.files || [];
+                    
+                    if (recentUploads.length === 0) {
+                        container.style.display = 'none';
+                        return;
+                    }
+                    
+                    container.style.display = 'block';
+                    list.innerHTML = '';
+                    
+                    recentUploads.forEach((item, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'recent-upload-item';
+                        
+                        const date = new Date(item.date);
+                        const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        
+                        const fileNameSpan = document.createElement('span');
+                        fileNameSpan.className = 'file-name';
+                        fileNameSpan.textContent = item.filename;
+                        fileNameSpan.title = item.filename;
+                        
+                        const dateSpan = document.createElement('span');
+                        dateSpan.className = 'file-date';
+                        dateSpan.textContent = dateStr;
+                        
+                        const loadBtn = document.createElement('button');
+                        loadBtn.className = 'load-btn';
+                        loadBtn.textContent = item.stl_file ? 'Load' : 'Convert';
+                        loadBtn.disabled = !item.stl_file;
+                        if (!item.stl_file) {
+                            loadBtn.style.opacity = '0.5';
+                            loadBtn.style.cursor = 'not-allowed';
+                            loadBtn.title = 'STL file not found. Please re-upload.';
+                        }
+                        loadBtn.onclick = function() {
+                            if (item.stl_file) {
+                                loadRecentFile(item.stl_file, item.filename);
+                            } else {
+                                window.showError('STL file not available. Please re-upload the file.');
+                            }
+                        };
+                        
+                        div.appendChild(fileNameSpan);
+                        div.appendChild(dateSpan);
+                        div.appendChild(loadBtn);
+                        
+                        list.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching recent uploads:', error);
+                    // Fallback to localStorage if server request fails
+                    const localRecent = getRecentUploads();
+                    if (localRecent.length > 0) {
+                        displayLocalRecentUploads(localRecent);
+                    } else {
+                        container.style.display = 'none';
+                    }
+                });
+        }
+
+        function displayLocalRecentUploads(recentUploads) {
+            const container = document.getElementById('recentUploads');
+            const list = document.getElementById('recentUploadsList');
+            
+            if (!container || !list) return;
+            
+            if (recentUploads.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            list.innerHTML = '';
+            
+            recentUploads.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'recent-upload-item';
+                
+                const date = new Date(item.date);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const fileNameSpan = document.createElement('span');
+                fileNameSpan.className = 'file-name';
+                fileNameSpan.textContent = item.filename;
+                fileNameSpan.title = item.filename;
+                
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'file-date';
+                dateSpan.textContent = dateStr;
+                
+                const loadBtn = document.createElement('button');
+                loadBtn.className = 'load-btn';
+                loadBtn.textContent = 'Load';
+                loadBtn.onclick = function() {
+                    loadRecentFile(item.stlFile, item.filename);
+                };
+                
+                div.appendChild(fileNameSpan);
+                div.appendChild(dateSpan);
+                div.appendChild(loadBtn);
+                
+                list.appendChild(div);
+            });
+        }
+
+        window.loadRecentFile = function(stlFile, filename) {
+            if (!stlFile) {
+                window.showError('File not available. Please upload again.');
+                return;
+            }
+            
+            // Show loading
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.classList.add('show');
+            }
+            
+            window.hideMessages();
+            
+            // Load the STL file
+            window.loadSTLModel(stlFile);
+            
+            // Show success message
+            setTimeout(() => {
+                if (loading) {
+                    loading.classList.remove('show');
+                }
+                window.showSuccess(`Loaded: ${filename}`);
+            }, 500);
+        };
+
         // File input handling
         const fileInput = document.getElementById('fileInput');
         const uploadBtn = document.getElementById('uploadBtn');
@@ -554,7 +1316,12 @@
                 fileInfo.innerHTML = `<strong>Selected:</strong> ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
                 fileInfo.classList.add('show');
                 uploadBtn.disabled = false;
+                uploadBtn.style.display = 'inline-block';
                 window.hideMessages();
+                console.log('File selected:', file.name, 'Upload button enabled');
+            } else {
+                uploadBtn.disabled = true;
+                console.log('No file selected');
             }
         });
 
@@ -586,6 +1353,10 @@
                 } else if (data.success) {
                     window.showSuccess(data.message);
                     if (data.stl_file) {
+                        // Save to recent uploads
+                        const filename = file.name;
+                        saveRecentUpload(filename, data.stl_file);
+                        // Load the model
                         window.loadSTLModel(data.stl_file);
                     } else {
                         window.showError('STL conversion not available. Please install cadquery-ocp.');
@@ -619,6 +1390,8 @@
         // Initialize viewer on page load
         window.addEventListener('load', function() {
             window.initViewer();
+            // Display recent uploads
+            displayRecentUploads();
         });
     </script>
 </body>

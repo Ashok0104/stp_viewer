@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_file
 import os
 import tempfile
+import datetime
 from werkzeug.utils import secure_filename
 import sys
 
@@ -111,6 +112,7 @@ def upload_file():
             return jsonify({
                 'success': True,
                 'stl_file': f'/static/{stl_filename}',
+                'filename': filename,
                 'message': 'File uploaded and converted successfully'
             })
         else:
@@ -132,6 +134,49 @@ def uploaded_file(filename):
 @app.route('/static/<filename>')
 def static_file(filename):
     return send_file(os.path.join('static', filename))
+
+@app.route('/api/recent-uploads', methods=['GET'])
+def get_recent_uploads():
+    """Get list of recent uploads from uploads folder"""
+    try:
+        uploads_dir = app.config['UPLOAD_FOLDER']
+        static_dir = 'static'
+        
+        if not os.path.exists(uploads_dir):
+            return jsonify({'files': []})
+        
+        # Get all STP/STEP files from uploads folder
+        files = []
+        for filename in os.listdir(uploads_dir):
+            if allowed_file(filename):
+                file_path = os.path.join(uploads_dir, filename)
+                # Get file modification time
+                mtime = os.path.getmtime(file_path)
+                
+                # Check if corresponding STL exists
+                stl_filename = filename.rsplit('.', 1)[0] + '.stl'
+                stl_path = os.path.join(static_dir, stl_filename)
+                stl_file = f'/static/{stl_filename}' if os.path.exists(stl_path) else None
+                
+                files.append({
+                    'filename': filename,
+                    'stl_file': stl_file,
+                    'date': mtime,
+                    'size': os.path.getsize(file_path)
+                })
+        
+        # Sort by modification time (newest first) and take last 4
+        files.sort(key=lambda x: x['date'], reverse=True)
+        files = files[:4]
+        
+        # Convert timestamp to ISO format
+        for file_info in files:
+            file_info['date'] = datetime.datetime.fromtimestamp(file_info['date']).isoformat()
+        
+        return jsonify({'files': files})
+    
+    except Exception as e:
+        return jsonify({'error': str(e), 'files': []}), 500
 
 if __name__ == '__main__':
     if not HAS_OCC:
