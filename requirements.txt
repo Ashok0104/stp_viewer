@@ -1,0 +1,6 @@
+Flask>=3.0.0
+Werkzeug>=3.0.0
+# For STP file conversion (Windows - recommended):
+cadquery-ocp>=7.8.0
+# Alternative for Linux/Mac:
+# conda install -c conda-forge pythonocc-core
