@@ -139,14 +139,11 @@
             height: 600px;
             border: 2px solid #dee2e6;
             border-radius: 10px;
-            background: #000;
+            background: #1a1a1a;
             position: relative;
             overflow: hidden;
-            display: none;
-        }
-
-        .viewer-container.show {
             display: block;
+            min-height: 600px;
         }
 
         .viewer-controls {
@@ -292,18 +289,49 @@
         let scene, camera, renderer, controls, model, wireframe = false, showAxes = true;
         let axesHelper;
 
+        // Update tool button states to reflect current settings
+        // Define this function immediately and make it globally available
+        window.updateToolStates = function() {
+            try {
+                const buttons = document.querySelectorAll('.viewer-controls button');
+                if (buttons.length >= 3) {
+                    const wireframeBtn = buttons[1]; // Second button
+                    const axesBtn = buttons[2]; // Third button
+                    
+                    if (wireframeBtn) {
+                        wireframeBtn.textContent = wireframe ? 'Wireframe: ON' : 'Wireframe: OFF';
+                        wireframeBtn.style.background = wireframe ? '#28a745' : '#667eea';
+                    }
+                    
+                    if (axesBtn) {
+                        axesBtn.textContent = showAxes ? 'Axes: ON' : 'Axes: OFF';
+                        axesBtn.style.background = showAxes ? '#28a745' : '#667eea';
+                    }
+                }
+            } catch (e) {
+                console.warn('Error updating tool states:', e);
+            }
+        };
+
         // Initialize Three.js scene
         window.initViewer = function() {
             const container = document.getElementById('viewerContainer');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
+            if (!container) {
+                console.error('Viewer container not found');
+                return;
+            }
+            
+            // Ensure container is visible and has dimensions
+            container.style.display = 'block';
+            const width = container.clientWidth || 800;
+            const height = container.clientHeight || 600;
 
             // Scene
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x1a1a1a);
 
-            // Camera
-            camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            // Camera - increase far plane for larger models
+            camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 10000);
             camera.position.set(100, 100, 100);
             camera.lookAt(0, 0, 0);
 
@@ -332,6 +360,7 @@
 
             // Axes helper
             axesHelper = new THREE.AxesHelper(50);
+            axesHelper.visible = showAxes;
             scene.add(axesHelper);
 
             // Grid helper
@@ -340,6 +369,13 @@
 
             // Handle window resize
             window.addEventListener('resize', onWindowResize);
+
+            // Initialize tool states after a brief delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof window.updateToolStates === 'function') {
+                    window.updateToolStates();
+                }
+            }, 100);
 
             animate();
         };
@@ -358,61 +394,127 @@
         };
 
         window.loadSTLModel = function(url) {
+            // Ensure viewer is initialized
+            if (!scene || !camera || !renderer) {
+                console.error('Viewer not initialized');
+                window.showError('Viewer not initialized. Please refresh the page.');
+                return;
+            }
+
             const loader = new STLLoader();
             
             loader.load(url, function(geometry) {
-                // Remove existing model
-                if (model) {
-                    scene.remove(model);
+                try {
+                    // Remove existing model
+                    if (model) {
+                        scene.remove(model);
+                        model.geometry.dispose();
+                        model.material.dispose();
+                    }
+
+                    // Compute normals for proper lighting
+                    geometry.computeVertexNormals();
+                    geometry.computeBoundingBox();
+
+                    // Check if geometry is valid
+                    if (!geometry.boundingBox || geometry.boundingBox.isEmpty()) {
+                        throw new Error('Invalid geometry: bounding box is empty');
+                    }
+
+                    // Center geometry manually
+                    const center = new THREE.Vector3();
+                    geometry.boundingBox.getCenter(center);
+                    geometry.translate(-center.x, -center.y, -center.z);
+
+                    // Recompute bounding box after translation
+                    geometry.computeBoundingBox();
+
+                    // Calculate bounding box size for camera positioning
+                    const size = geometry.boundingBox.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    
+                    // Handle edge case: if model is too small or invalid
+                    if (maxDim < 0.001 || !isFinite(maxDim)) {
+                        console.warn('Model size is very small or invalid, using default camera position');
+                        camera.position.set(100, 100, 100);
+                    } else {
+                        // Calculate appropriate camera distance
+                        const fov = camera.fov * (Math.PI / 180);
+                        let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+                        cameraZ *= 1.8; // Add more margin
+                        
+                        // Ensure camera is not too close or too far
+                        cameraZ = Math.max(cameraZ, maxDim * 0.5);
+                        cameraZ = Math.min(cameraZ, 10000);
+                        
+                        camera.position.set(cameraZ, cameraZ, cameraZ);
+                    }
+                    
+                    camera.lookAt(0, 0, 0);
+                    controls.target.set(0, 0, 0);
+                    controls.update();
+
+                    // Create material with current wireframe state
+                    const material = new THREE.MeshPhongMaterial({
+                        color: 0x667eea,
+                        specular: 0x111111,
+                        shininess: 200,
+                        flatShading: false,
+                        wireframe: wireframe
+                    });
+
+                    // Create mesh
+                    model = new THREE.Mesh(geometry, material);
+                    model.castShadow = true;
+                    model.receiveShadow = true;
+                    scene.add(model);
+
+                    // Update all tools to reflect current state
+                    if (typeof window.updateToolStates === 'function') {
+                        window.updateToolStates();
+                    }
+                    
+                    // Ensure controls are properly updated
+                    controls.update();
+                    
+                    // Force a render
+                    renderer.render(scene, camera);
+
+                    console.log('Model loaded successfully. Size:', size, 'Camera position:', camera.position);
+                } catch (error) {
+                    console.error('Error processing model:', error);
+                    window.showError('Error processing 3D model: ' + error.message);
                 }
-
-                // Center geometry manually
-                geometry.computeBoundingBox();
-                const center = new THREE.Vector3();
-                geometry.boundingBox.getCenter(center);
-                geometry.translate(-center.x, -center.y, -center.z);
-
-                // Calculate bounding box for camera positioning
-                const box = new THREE.Box3().setFromObject(new THREE.Mesh(geometry));
-                const size = box.getSize(new THREE.Vector3());
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const fov = camera.fov * (Math.PI / 180);
-                let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-                cameraZ *= 1.5;
-                camera.position.set(cameraZ, cameraZ, cameraZ);
-                controls.target.set(0, 0, 0);
-                controls.update();
-
-                // Create material
-                const material = new THREE.MeshPhongMaterial({
-                    color: 0x667eea,
-                    specular: 0x111111,
-                    shininess: 200,
-                    flatShading: false
-                });
-
-                // Create mesh
-                model = new THREE.Mesh(geometry, material);
-                model.castShadow = true;
-                model.receiveShadow = true;
-                scene.add(model);
-
-                // Show viewer
-                document.getElementById('viewerContainer').classList.add('show');
-            }, undefined, function(error) {
-                window.showError('Error loading 3D model: ' + error);
+            }, function(progress) {
+                // Progress callback
+                if (progress.lengthComputable) {
+                    const percentComplete = progress.loaded / progress.total * 100;
+                    console.log('Loading progress: ' + percentComplete.toFixed(2) + '%');
+                }
+            }, function(error) {
+                console.error('Error loading STL file:', error);
+                window.showError('Error loading 3D model: ' + (error.message || error));
             });
         };
 
         window.resetView = function() {
-            if (model) {
-                const box = new THREE.Box3().setFromObject(model);
-                const size = box.getSize(new THREE.Vector3());
+            if (model && model.geometry) {
+                model.geometry.computeBoundingBox();
+                const size = model.geometry.boundingBox.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const fov = camera.fov * (Math.PI / 180);
-                let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-                cameraZ *= 1.5;
-                camera.position.set(cameraZ, cameraZ, cameraZ);
+                
+                if (maxDim > 0.001 && isFinite(maxDim)) {
+                    const fov = camera.fov * (Math.PI / 180);
+                    let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+                    cameraZ *= 1.8;
+                    cameraZ = Math.max(cameraZ, maxDim * 0.5);
+                    cameraZ = Math.min(cameraZ, 10000);
+                    camera.position.set(cameraZ, cameraZ, cameraZ);
+                } else {
+                    camera.position.set(100, 100, 100);
+                }
+                
+                camera.lookAt(0, 0, 0);
                 controls.target.set(0, 0, 0);
                 controls.update();
             }
@@ -423,11 +525,19 @@
             if (model) {
                 model.material.wireframe = wireframe;
             }
+            if (typeof window.updateToolStates === 'function') {
+                window.updateToolStates();
+            }
         };
 
         window.toggleAxes = function() {
             showAxes = !showAxes;
-            axesHelper.visible = showAxes;
+            if (axesHelper) {
+                axesHelper.visible = showAxes;
+            }
+            if (typeof window.updateToolStates === 'function') {
+                window.updateToolStates();
+            }
         };
 
         // File input handling
